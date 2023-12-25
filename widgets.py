@@ -45,14 +45,43 @@ class SlidePanel(ctk.CTkFrame):
         self.pos = self.start_pos
         self.in_start_pos = True
 
+        alarm_label = ctk.CTkLabel(
+            self, text="Alarm Settings", font=("Segoe UI bold", height//45))
         self.change_btn_text = ctk.StringVar(self, "Change Alarm")
         self.change_alarm_btn = ctk.CTkButton(
             self, textvariable=self.change_btn_text, font=("Segoe UI", height//50), width=height//10)
-        self.change_theme_btn = ctk.CTkButton(
+
+        weather_label = ctk.CTkLabel(
+            self, text="Weather Settings", font=("Segoe UI bold", height//45))
+        self.radio = ctk.IntVar(self, 1)
+        self.celc_btn = ctk.CTkRadioButton(
+            self, text="Celcius", variable=self.radio, value=1, font=("Segoe UI", height//50),
+            radiobutton_height=height//30,
+            radiobutton_width=height//30)
+        self.faren_btn = ctk.CTkRadioButton(
+            self, text="Fahrenheit", variable=self.radio, value=2, font=("Segoe UI", height//50),
+            radiobutton_height=height//30,
+            radiobutton_width=height//30)
+        self.location_choice = ctk.StringVar(self, value="Waterloo")
+        self.location_options = ctk.CTkOptionMenu(self, values=[
+            "Waterloo", "Hamilton", "Toronto", "Montreal", "Vancouver"],
+            variable=self.location_choice, font=("Segoe UI", height//50), width=height//10)
+
+        ui_label = ctk.CTkLabel(self, text="UI Settings",
+                                font=("Segoe UI bold", height//45))
+        change_theme_btn = ctk.CTkButton(
             self, text="Light/Dark", font=("Segoe UI", height//50), width=height//10, command=self.change_theme)
 
-        self.change_alarm_btn.pack(pady=5)
-        self.change_theme_btn.pack(pady=5)
+        alarm_label.pack(pady=2)
+        self.change_alarm_btn.pack(pady=2)
+
+        weather_label.pack(pady=(5, 2))
+        self.celc_btn.pack(pady=1)
+        self.faren_btn.pack(pady=1)
+        self.location_options.pack(pady=2)
+
+        ui_label.pack(pady=(5, 2))
+        change_theme_btn.pack(pady=2)
 
     def change_theme(self):
         if ctk.get_appearance_mode() == "Dark":

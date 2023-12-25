@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image, ImageTk
+from PIL import Image
 from widgets import LTime
 import time
 import winsound
@@ -23,21 +23,17 @@ class AlarmClock(ctk.CTkFrame):
         self.height = height
         self.btn_text = ctk.StringVar(self, "Change Alarm")
         self.not_changing = True
-        self.blinking = True
-        self.blink_off = True
         self.snoozed = False
         self.stopped = False
         self.play_sound = True
 
-        self.rowconfigure((0, 1, 2), weight=1, uniform="a")
+        self.rowconfigure((0, 2), weight=1)
+        self.rowconfigure((1), weight=2)
         self.columnconfigure((0, 1, 2, 3), weight=1)
 
         self.current_time = LTime(self, self.height//4, True)
         self.current_ampm = LTime(self, self.height//10, False)
-        self.empty_box = ctk.CTkFrame(
-            self, fg_color="transparent", bg_color="transparent")
-        self.empty_box.grid(row=0, column=1, sticky="s")
-        self.current_time.grid(row=1, column=0, columnspan=3, sticky="nesw")
+        self.current_time.grid(row=1, column=0, columnspan=3)
         self.current_ampm.grid(row=1, column=3, sticky="w")
 
         self.set_time_label = ctk.CTkLabel(
@@ -99,7 +95,6 @@ class AlarmClock(ctk.CTkFrame):
             self.snooze_btn.grid(row=2, column=1)
             self.stop_btn.grid(row=2, column=2)
             self.og_theme = ctk.get_appearance_mode()
-            self.blink()
             self.alarm_sounds()
         self.after(1000, self.check_alarm)
 
@@ -107,33 +102,19 @@ class AlarmClock(ctk.CTkFrame):
         hrmin, apm = LTime.current_time(self)
         mins = int(hrmin[3:5])
         if mins > 51:
-            self.increase_hour
+            self.increase_hour()
             self.set_min = mins + 9 - 60
         else:
             self.set_min = mins + 9
         self.set_time.set(f"{self.set_hour:02}:{self.set_min:02}:00")
-        self.blinking = False
-        self.blink_off = True
         self.play_sound = False
         self.snooze_btn.grid_forget()
         self.stop_btn.grid_forget()
 
     def stop_press(self):
-        self.blinking = False
-        self.blink_off = True
         self.play_sound = False
         self.snooze_btn.grid_forget()
         self.stop_btn.grid_forget()
-
-    def blink(self):
-        if self.blinking:
-            if ctk.get_appearance_mode() == "Dark":
-                ctk.set_appearance_mode("Light")
-            else:
-                ctk.set_appearance_mode("Dark")
-            self.after(500, self.blink)
-        else:
-            ctk.set_appearance_mode(self.og_theme)
 
     def alarm_sounds(self):
         if self.play_sound:
