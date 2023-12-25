@@ -33,7 +33,7 @@ class App(ctk.CTk):
         menu.celc_btn.configure(command=weather.change_celc)
         menu.faren_btn.configure(command=weather.change_faren)
         menu.location_options.configure(
-            command=lambda x: weather.change_location(menu.location_choice.get()))
+            command=lambda _: weather.change_location(menu.location_choice.get()))
 
         clock.grid(row=2, column=2, sticky="nesw")
         weather.grid(row=3, column=2, sticky="n")
